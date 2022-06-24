@@ -1,4 +1,4 @@
-const moviesArr = [
+const movies = [
   {
     title: "A Wrinkle in Time",
     director: "Ava DuVernay",
@@ -83,23 +83,33 @@ const moviesArr = [
 
 // Add here the script that will be run to actually seed the database (feel free to refer to the previous lesson)
 
-const Movies = require("../models/Movie.model");
+// bin/seeds.js
 
-// insertarla en la BD
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+const Movie = require('../models/Movie.model');
+
+const MONGO_URI = process.env.MONGODB_URI || 'mongodb://localhost/lab-express-cinema';
 
 mongoose
-  .connect("mongodb://localhost:27017")
-  .then((response) => {
-    console.log("conectados a la Dase de Datos");
-
-    return Movies.insertMany(moviesArr);
-  })
-  .then((response) => {
-    console.log("Pokemons agregados correctamente");
-    // hacer la desconeccion
-    mongoose.connection.close();
+  .connect(MONGO_URI)
+  .then((x) => {
+    console.log(
+      `Connected to Mongo! Database name: "${x.connections[0].name}"`
+    );
   })
   .catch((err) => {
-    console.log(err);
-  });// ... your code here
+    console.error("Error connecting to mongo: ", err);
+  });
+
+// PASTE HERE THE LIST OF BOOKS PROVIDED IN THIS GIST: https://gist.github.com/ironhack-edu/2816267a015d4870f95275cb873d33b6
+
+// const books = [...]
+
+Movie.create(movies)
+  .then(booksFromDB => {
+    console.log(`Created ${booksFromDB.length} books`);
+
+    // Once created, close the DB connection
+    mongoose.connection.close();
+  })
+  .catch(err => console.log(`An error occurred while creating books from the DB: ${err}`));

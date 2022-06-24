@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema
 
-const movieSchema = new mongoose.Schema({
+
+const movieSchema = new Schema({
   title: {
     type: String,
   },
@@ -25,6 +27,6 @@ const movieSchema = new mongoose.Schema({
   },
 });
 
-const Movies = mongoose.model("Movies", movieSchema);
+const Movies = mongoose.model("Movie", movieSchema);
 //Pokemon -> pokemons
 module.exports = Movies;
